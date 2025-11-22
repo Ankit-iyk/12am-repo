@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI FairStake — Financial Fairness & Safety Platform</title>
+
+  <style>
+    :root {
+      --bg-main: #020617;            /* dark base like dashboard */
+      --bg-card: #dbe5f4;            /* light bluish-grey for all cards */
+      --bg-card-soft: #cfd8e8;
+      --border-card: rgba(148, 163, 184, 0.7);
+      --text-main: #e5e7eb;
+      --text-muted: #cbd5f5;
+      --text-card-main: #111827;
+      --text-card-soft: #4b5563;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        sans-serif;
+      background:
+        radial-gradient(circle at 0 0, #1f2937 0, transparent 55%),
+        radial-gradient(circle at 100% 0, #1f2937 0, transparent 55%),
+        var(--bg-main);
+      color: var(--text-main);
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ---------- Header / Navbar ---------- */
+
+    .site-header {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 50;
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.55);
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.9);
+    }
+
+    .header-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 20px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .nav-menu a {
+      position: relative;
+      padding-bottom: 3px;
+      transition: color 140ms ease;
+    }
+
+    .nav-menu a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background: #ffffff;
+      border-radius: 999px;
+      transition: width 160ms ease;
+    }
+
+    .nav-menu a:hover {
+      color: #ffffff;
+    }
+
+    .nav-menu a:hover::after {
+      width: 100%;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-nav {
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      font-size: 14px;
+      font-weight: 500;
+      color: #e5e7eb;
+      background: transparent;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.8);
+      transition: background 140ms ease, color 140ms ease, border-color 140ms ease,
+        transform 140ms ease, box-shadow 140ms ease;
+    }
+
+    .btn-nav:hover {
+      background: #e5e7eb;
+      color: #020617;
+      border-color: #e5e7eb;
+      transform: translateY(-1px);
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.95);
+    }
+
+    .btn-nav.secondary {
+      background: #e5e7eb;
+      color: #020617;
+    }
+
+    .btn-nav.secondary:hover {
+      background: #ffffff;
+      border-color: #ffffff;
+    }
+
+    @media (max-width: 860px) {
+      .header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .nav-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .nav-right {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .nav-menu {
+        flex-wrap: wrap;
+        row-gap: 6px;
+      }
+    }
+
+    /* ---------- Layout sections ---------- */
+
+    main {
+      padding-top: 96px; /* offset for fixed header */
+    }
+
+    .section {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 40px 24px 32px;
+      scroll-margin-top: 96px;
+    }
+
+    .section-title {
+      font-size: 26px;
+      font-weight: 700;
+      margin: 0 0 18px;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+    }
+
+    .section-subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin-bottom: 18px;
+    }
+
+    /* ---------- Hero (Home) ---------- */
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 16px;
+      border-radius: 26px;
+      background: radial-gradient(circle at top left,
+          #1f2937 0,
+          #020617 55%,
+          #020617 100%);
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      box-shadow:
+        0 40px 90px rgba(15, 23, 42, 0.95),
+        0 0 14px rgba(15, 23, 42, 0.8);
+      padding: 40px 36px 44px;
+      animation: fadeUp 600ms ease-out both;
+    }
+
+    .hero-eyebrow {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #cbd5f5;
+    }
+
+    .hero-title {
+      font-size: 34px;
+      line-height: 1.15;
+      margin: 0;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: #ffffff;
+    }
+
+    .hero-text {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 640px;
+    }
+
+    .hero-cta {
+      margin-top: 18px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      border-radius: 999px;
+      padding: 10px 20px;
+      border: none;
+      background: #f9fafb;
+      color: #020617;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.95);
+      transition: transform 140ms ease, box-shadow 140ms ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 32px rgba(15, 23, 42, 1);
+    }
+
+    .btn-ghost {
+      border-radius: 999px;
+      padding: 9px 18px;
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 140ms ease, border-color 140ms ease,
+        color 140ms ease, transform 140ms ease;
+    }
+
+    .btn-ghost:hover {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: #e5e7eb;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    /* ---------- How it works ---------- */
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 880px) {
+      .features-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .feature-card {
+      background: linear-gradient(145deg, var(--bg-card), var(--bg-card-soft));
+      border-radius: 22px;
+      padding: 18px 20px 18px;
+      border: 1px solid var(--border-card);
+      box-shadow: 0 22px 50px rgba(15, 23, 42, 0.7);
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      animation: fadeUp 650ms ease-out both;
+    }
+
+    .feature-card:nth-child(1) { animation-delay: 40ms; }
+    .feature-card:nth-child(2) { animation-delay: 80ms; }
+    .feature-card:nth-child(3) { animation-delay: 120ms; }
+    .feature-card:nth-child(4) { animation-delay: 160ms; }
+
+    .feature-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      background: #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      color: #e5e7eb;
+    }
+
+    .feature-card h3 {
+      margin: 0 0 6px;
+      font-size: 17px;
+      color: var(--text-card-main);
+    }
+
+    .feature-card p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-card-soft);
+      line-height: 1.5;
+    }
+
+    /* ---------- About ---------- */
+
+    .about-intro {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 900px;
+      margin-bottom: 18px;
+    }
+
+    .about-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 880px) {
+      .about-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .about-card-light {
+      background: linear-gradient(145deg, var(--bg-card), var(--bg-card-soft));
+      border-radius: 22px;
+      padding: 18px 20px 18px;
+      border: 1px solid var(--border-card);
+      box-shadow: 0 22px 50px rgba(15, 23, 42, 0.72);
+      color: var(--text-card-main);
+      font-size: 14px;
+    }
+
+    .about-card-light h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+    }
+
+    .about-card-light ul {
+      margin: 0;
+      padding-left: 18px;
+      line-height: 1.6;
+    }
+
+    .about-card-light p {
+      margin: 0;
+      color: var(--text-card-soft);
+    }
+
+    /* ---------- Reviews ---------- */
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 880px) {
+      .testimonial-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .testimonial {
+      background: linear-gradient(145deg, var(--bg-card), var(--bg-card-soft));
+      border-radius: 22px;
+      padding: 16px 18px 14px;
+      border: 1px solid var(--border-card);
+      box-shadow: 0 20px 46px rgba(15, 23, 42, 0.78);
+      font-size: 14px;
+      color: var(--text-card-soft);
+      animation: fadeUp 650ms ease-out both;
+    }
+
+    .testimonial:nth-child(1) { animation-delay: 40ms; }
+    .testimonial:nth-child(2) { animation-delay: 80ms; }
+    .testimonial:nth-child(3) { animation-delay: 120ms; }
+    .testimonial:nth-child(4) { animation-delay: 160ms; }
+    .testimonial:nth-child(5) { animation-delay: 200ms; }
+
+    .testimonial strong {
+      color: var(--text-card-main);
+    }
+
+    /* ---------- FAQs ---------- */
+
+    .faq-list {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .faq-item {
+      background: linear-gradient(145deg, var(--bg-card), var(--bg-card-soft));
+      border-radius: 20px;
+      padding: 14px 18px;
+      border: 1px solid var(--border-card);
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.82);
+      font-size: 14px;
+      color: var(--text-card-soft);
+      animation: fadeUp 650ms ease-out both;
+    }
+
+    .faq-item:nth-child(1) { animation-delay: 30ms; }
+    .faq-item:nth-child(2) { animation-delay: 60ms; }
+    .faq-item:nth-child(3) { animation-delay: 90ms; }
+    .faq-item:nth-child(4) { animation-delay: 120ms; }
+    .faq-item:nth-child(5) { animation-delay: 150ms; }
+    .faq-item:nth-child(6) { animation-delay: 180ms; }
+    .faq-item:nth-child(7) { animation-delay: 210ms; }
+
+    .faq-item h4 {
+      margin: 0 0 6px;
+      font-size: 15px;
+      color: var(--text-card-main);
+    }
+
+    /* ---------- Footer ---------- */
+
+    footer {
+      border-top: 1px solid rgba(148, 163, 184, 0.5);
+      margin-top: 24px;
+      padding: 18px 24px 22px;
+      color: var(--text-muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a { opacity: 0.85; }
+    .footer-links a:hover { opacity: 1; }
+
+    /* ---------- Animations ---------- */
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+
+    /* Chatbase Chatbot Styles */
+    #chatbase-chatbot-button {
+      width: 65px !important;
+      height: 65px !important;
+      animation: pulseGlow 2s infinite ease-in-out;
+      border-radius: 50% !important;
+      position: fixed !important;
+      bottom: 90px !important;
+      right: 24px !important;
+      z-index: 9999 !important;
+      transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    }
+
+    #chatbase-chatbot-button:hover {
+      transform: scale(1.05) !important;
+    }
+
+    @keyframes pulseGlow {
+      0% { 
+        box-shadow: 0 0 0px rgba(203, 213, 245, 0.4), 0 0 0px rgba(203, 213, 245, 0.2);
+      }
+      50% { 
+        box-shadow: 0 0 20px rgba(203, 213, 245, 0.9), 0 0 30px rgba(203, 213, 245, 0.5);
+      }
+      100% { 
+        box-shadow: 0 0 0px rgba(203, 213, 245, 0.4), 0 0 0px rgba(203, 213, 245, 0.2);
+      }
+    }
+
+    /* Ensure chatbot widget container has smooth transitions */
+    #chatbase-chatbot-widget {
+      transition: opacity 0.3s ease, transform 0.3s ease !important;
+    }
+  </style>
+
+  <!-- Chatbase Chatbot Embed -->
+  <script>
+    window.embeddedChatbotConfig = {
+      chatbotId: "iRl4VsjNhuiaSN1QAz_SO",
+      domain: "www.chatbase.co"
+    }
+  </script>
+  <script src="https://www.chatbase.co/embed.min.js" defer></script>
+</head>
+<body>
+  <!-- Fixed Navbar / Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <img
+          src="./83541380-17ab-4c10-8a47-9b42bbae6625-removebg-preview.png"
+          alt="AI FairStake Logo"
+          class="brand-logo"
+        />
+        <div class="brand-name">AI FairStake</div>
+      </div>
+
+      <div class="nav-right">
+        <nav class="nav-menu">
+          <a href="#home">Home</a>
+          <!-- Dashboard is a separate page -->
+          <a href="dashboard.html">Dashboard</a>
+          <a href="#about">About Us</a>
+          <a href="#reviews">Reviews</a>
+          <a href="#faqs">FAQs</a>
+        </nav>
+
+        <div class="nav-buttons">
+          <a href="signup.html" class="btn-nav">Sign Up</a>
+          <a href="login.html" class="btn-nav secondary">Log In</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HOME / HERO -->
+    <section class="section" id="home">
+      <div class="hero">
+        <div class="hero-eyebrow">Financial Fairness &amp; Safety Intelligence</div>
+        <h1 class="hero-title">AI FairStake</h1>
+        <p class="hero-text">
+          AI FairStake is an all‑in‑one platform built for students, gig
+          workers and first‑time borrowers in India. It combines policy
+          fairness checks, behaviour‑based credit assessment, SMS‑level
+          financial health, and loan safety intelligence into one clean,
+          judgment‑ready experience.
+        </p>
+        <div class="hero-cta">
+          <button class="btn-primary" type="button"
+            onclick="location.href='#how-it-works'">
+            Explore How It Works
+          </button>
+          <button class="btn-ghost" type="button"
+            onclick="location.href='#about'">
+            View Vision &amp; Mission
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section" id="how-it-works">
+      <h2 class="section-title">How AI FairStake Works</h2>
+      <p class="section-subtitle">
+        AI FairStake connects four intelligence layers into one dashboard:
+        policy fairness, behaviour‑based credit, SMS‑level financial health
+        and loan safety analysis.
+      </p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📜</div>
+          <div>
+            <h3>Policy &amp; Scheme Fairness</h3>
+            <p>
+              Reads any government scheme PDF to flag biased eligibility rules,
+              ambiguous clauses and exclusion risks, while suggesting clearer,
+              fairer rewrites with a Scheme Fairness Score.
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🧮</div>
+          <div>
+            <h3>Behaviour‑Based Credit Readiness</h3>
+            <p>
+              Builds a transparent picture of financial readiness using earning
+              stability, savings habits, spending discipline, cash‑flow patterns
+              and academic consistency instead of legacy credit scores.
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📲</div>
+          <div>
+            <h3>SMS Financial Health Intelligence</h3>
+            <p>
+              Lets you paste SMS text to extract income, expenses, EMI alerts,
+              UPI activity, cash‑flow cycles and budgeting leaks, predicting
+              upcoming risky months ahead of time.
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🛡️</div>
+          <div>
+            <h3>Loan Safety &amp; Clause Protection</h3>
+            <p>
+              Scans loan PDFs, WhatsApp messages or screenshots to surface
+              hidden fees, high APR traps, auto‑renewal fraud and illegal
+              penalties, and produces a clear Loan Safety Score.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT / VISION & MISSION -->
+    <section class="section" id="about">
+      <h2 class="section-title">About AI FairStake</h2>
+      <p class="about-intro">
+        AI FairStake is a Financial Fairness &amp; Safety Intelligence Platform
+        for students, gig workers and first‑time borrowers. It audits policies
+        for bias, interprets financial behaviour and protects users from unfair
+        credit decisions and unsafe loans. Lakhs of young Indians are excluded
+        from schemes, rejected for loans or trapped in predatory apps because
+        traditional systems ignore their real behaviour. AI FairStake unifies
+        policy fairness, financial health, loan safety and transparent credit
+        into one dark‑theme, judgment‑ready ecosystem of fairness.
+      </p>
+
+      <div class="about-row">
+        <div class="about-card-light">
+          <h3>Vision</h3>
+          <p>
+            To create a financially fair world where every young Indian —
+            regardless of credit history, income type or background — receives
+            unbiased treatment, safe guidance and equal access to opportunities.
+          </p>
+        </div>
+
+        <div class="about-card-light">
+          <h3>Mission</h3>
+          <ul>
+            <li>Use AI to eliminate bias in financial policies and schemes.</li>
+            <li>Build credit assessment based on real behaviour, not cards.</li>
+            <li>Give users real‑time visibility into income, expenses and risk.</li>
+            <li>Protect youth from predatory loan apps and fraudulent clauses.</li>
+            <li>Deliver insights through a clean, accessible platform.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- REVIEWS -->
+    <section class="section" id="reviews">
+      <h2 class="section-title">User Reviews</h2>
+      <p class="section-subtitle">
+        Realistic feedback that reflects how AI FairStake supports students,
+        gig workers, NGOs and first‑time borrowers.
+      </p>
+
+      <div class="testimonial-grid">
+        <div class="testimonial">
+          <p>
+            <strong>⭐⭐⭐⭐⭐ Student, Bengaluru</strong><br />
+            “FairScore explained exactly why my loan application failed. I
+            improved my spending consistency and got approved the next month.”
+          </p>
+        </div>
+
+        <div class="testimonial">
+          <p>
+            <strong>⭐⭐⭐⭐⭐ Gig Worker, Hyderabad</strong><br />
+            “LoanGuard saved me from a loan app charging 140% APR. This tool
+            should be mandatory.”
+          </p>
+        </div>
+
+        <div class="testimonial">
+          <p>
+            <strong>⭐⭐⭐⭐⭐ Student, Pune</strong><br />
+            “I finally understood why a government scholarship wasn’t accepting
+            me. The bias explanation was crystal clear.”
+          </p>
+        </div>
+
+        <div class="testimonial">
+          <p>
+            <strong>⭐⭐⭐⭐ NGO Researcher, Delhi</strong><br />
+            “SchemeSense fairness heatmaps are extremely useful for field
+            policy evaluation.”
+          </p>
+        </div>
+
+        <div class="testimonial">
+          <p>
+            <strong>⭐⭐⭐⭐⭐ First‑Time Borrower, Chennai</strong><br />
+            “The SMS‑based financial insights were shockingly accurate. It
+            helped me stop overspending instantly.”
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQS -->
+    <section class="section" id="faqs">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">
+        Crisp, user‑friendly answers to the most important questions about how
+        AI FairStake treats your data and supports your decisions.
+      </p>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <h4>Q1. Can I use this if I have no credit history?</h4>
+          <p>
+            Yes. FairScore is designed specifically for people with zero credit
+            history, such as students and new gig workers.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h4>Q2. Does the system read my SMS directly?</h4>
+          <p>
+            No. You manually paste SMS text into the tool. AI FairStake never
+            auto‑reads your inbox or takes background permissions.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h4>Q3. Can AI tell me whether a loan is safe?</h4>
+          <p>
+            Yes. LoanGuard reviews any loan text or PDF and highlights hidden
+            charges, risky clauses and overall loan safety.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h4>Q4. Can it audit any government scheme?</h4>
+          <p>
+            Yes. You can upload any central, state or institutional scheme PDF
+            and get bias analysis with clear explanations.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h4>Q5. Is my data stored?</h4>
+          <p>
+            No. The system is designed for local or session‑based processing.
+            Your uploaded text and PDFs are not permanently stored.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h4>Q6. Will this help with loan approvals?</h4>
+          <p>
+            Yes. FairScore shows how financially ready you are, what’s hurting
+            your profile and what to fix before you apply again.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h4>Q7. Can NGOs or banks use it?</h4>
+          <p>
+            Yes. AI FairStake is modular and API‑ready, making it suitable for
+            NGOs, lenders and policy researchers to run large‑scale analysis.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-links">
+      <a href="#about">About</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#faqs">FAQs</a>
+    </div>
+    <p>&copy; 2025 AI FairStake. All rights reserved.</p>
+  </footer>
+</body>
+</html>
