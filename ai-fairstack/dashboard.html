@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI FairStake — Dashboard</title>
+
+  <style>
+    :root {
+      --bg-main: #020617;
+      --bg-card: #dbe5f4;
+      --bg-card-soft: #cfd8e8;
+      --border-card: rgba(148, 163, 184, 0.8);
+      --text-main: #e5e7eb;
+      --text-muted: #cbd5f5;
+      --text-card-main: #111827;
+      --text-card-soft: #4b5563;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        sans-serif;
+      background:
+        radial-gradient(circle at 0 0, #1f2937 0, transparent 55%),
+        radial-gradient(circle at 100% 0, #1f2937 0, transparent 55%),
+        var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .app-shell {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px 40px;
+    }
+
+    .main-card {
+      width: 100%;
+      max-width: 1120px;
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 26px;
+      border: 1px solid rgba(148, 163, 184, 0.65);
+      box-shadow:
+        0 40px 100px rgba(15, 23, 42, 1),
+        0 0 16px rgba(15, 23, 42, 0.9);
+      padding: 26px 32px 24px;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 26px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 54px;
+      height: 54px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+    }
+
+    .top-links {
+      display: flex;
+      gap: 16px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .top-links a:hover { color: #ffffff; }
+
+    .logout-btn {
+      padding: 6px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: transparent;
+      color: #e5e7eb;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.9);
+      transition: background 140ms ease, color 140ms ease,
+        border-color 140ms ease, transform 140ms ease, box-shadow 140ms ease;
+    }
+
+    .logout-btn:hover {
+      background: #e5e7eb;
+      color: #020617;
+      border-color: #e5e7eb;
+      transform: translateY(-1px);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 1);
+    }
+
+    .welcome {
+      text-align: center;
+      margin-bottom: 26px;
+    }
+
+    .welcome h1 {
+      margin: 0 0 6px;
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+    }
+
+    .welcome p {
+      margin: 0;
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    @media (max-width: 1024px) {
+      .tools-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .main-card { padding: 22px 18px 20px; }
+      .tools-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .tool-card {
+      background: linear-gradient(145deg, var(--bg-card), var(--bg-card-soft));
+      border-radius: 22px;
+      padding: 18px 20px 18px;
+      border: 1px solid var(--border-card);
+      box-shadow: 0 26px 60px rgba(15, 23, 42, 0.85);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      animation: fadeUp 650ms ease-out both;
+      color: var(--text-card-main);
+    }
+
+    .tool-card:nth-child(1) { animation-delay: 40ms; }
+    .tool-card:nth-child(2) { animation-delay: 80ms; }
+    .tool-card:nth-child(3) { animation-delay: 120ms; }
+    .tool-card:nth-child(4) { animation-delay: 160ms; }
+    .tool-card:nth-child(5) { animation-delay: 200ms; }
+    .tool-card:nth-child(6) { animation-delay: 240ms; }
+
+    .tool-header {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .tool-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 16px;
+      background: #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: #e5e7eb;
+      flex-shrink: 0;
+    }
+
+    .tool-text h2 {
+      margin: 0 0 4px;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text-card-main);
+    }
+
+    .tool-text p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-card-soft);
+      line-height: 1.45;
+    }
+
+    .tool-action {
+      margin-top: 6px;
+    }
+
+    .primary-btn {
+      width: 100%;
+      border-radius: 999px;
+      padding: 10px 16px;
+      border: none;
+      background: #020617;
+      color: #f9fafb;
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 1);
+      transition: transform 140ms ease, box-shadow 140ms ease,
+        background 140ms ease;
+    }
+
+    .primary-btn span.arrow {
+      font-size: 18px;
+      transform: translateX(0);
+      transition: transform 140ms ease;
+    }
+
+    .primary-btn:hover {
+      background: #0b1120;
+      transform: translateY(-1px);
+      box-shadow: 0 24px 52px rgba(15, 23, 42, 1);
+    }
+
+    .primary-btn:hover .arrow {
+      transform: translateX(3px);
+    }
+
+    footer {
+      padding: 10px 16px 16px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+
+    /* Chatbase Chatbot Styles */
+    #chatbase-chatbot-button {
+      width: 65px !important;
+      height: 65px !important;
+      animation: pulseGlow 2s infinite ease-in-out;
+      border-radius: 50% !important;
+      position: fixed !important;
+      bottom: 90px !important;
+      right: 24px !important;
+      z-index: 9999 !important;
+      transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    }
+
+    #chatbase-chatbot-button:hover {
+      transform: scale(1.05) !important;
+    }
+
+    @keyframes pulseGlow {
+      0% { 
+        box-shadow: 0 0 0px rgba(203, 213, 245, 0.4), 0 0 0px rgba(203, 213, 245, 0.2);
+      }
+      50% { 
+        box-shadow: 0 0 20px rgba(203, 213, 245, 0.9), 0 0 30px rgba(203, 213, 245, 0.5);
+      }
+      100% { 
+        box-shadow: 0 0 0px rgba(203, 213, 245, 0.4), 0 0 0px rgba(203, 213, 245, 0.2);
+      }
+    }
+
+    /* Ensure chatbot widget container has smooth transitions */
+    #chatbase-chatbot-widget {
+      transition: opacity 0.3s ease, transform 0.3s ease !important;
+    }
+  </style>
+
+  <!-- Chatbase Chatbot Embed -->
+  <script>
+    window.embeddedChatbotConfig = {
+      chatbotId: "iRl4VsjNhuiaSN1QAz_SO",
+      domain: "www.chatbase.co"
+    }
+  </script>
+  <script src="https://www.chatbase.co/embed.min.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="main-card">
+      <header class="top-bar">
+        <div class="brand">
+          <img
+            src="./83541380-17ab-4c10-8a47-9b42bbae6625-removebg-preview.png"
+            alt="AI FairStake Logo"
+            class="brand-logo"
+          />
+          <div class="brand-name">AI FairStake</div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;">
+          <div class="top-links">
+            <a href="index.html">Home</a>
+          </div>
+          <button class="logout-btn" id="logout-btn" type="button">
+            Logout
+          </button>
+        </div>
+      </header>
+
+      <section class="welcome">
+        <h1>Welcome back!</h1>
+        <p>Choose a tool to improve your financial awareness &amp; eligibility.</p>
+      </section>
+
+      <section class="tools-grid">
+        <!-- SchemeSense -->
+        <article class="tool-card">
+          <div class="tool-header">
+            <div class="tool-icon">🎛️</div>
+            <div class="tool-text">
+              <h2>SchemeSense</h2>
+              <p>
+                Discover government welfare, subsidy and support schemes
+                automatically matched to your income, location and profile.
+              </p>
+            </div>
+          </div>
+          <div class="tool-action">
+            <button class="primary-btn" type="button">
+              <span>Start Eligibility Check</span>
+              <span class="arrow">→</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- FairScore -->
+        <article class="tool-card">
+          <div class="tool-header">
+            <div class="tool-icon">🏦</div>
+            <div class="tool-text">
+              <h2>FairScore</h2>
+              <p>
+                Build a fair, alternative credit score using payments, bills
+                and behaviour instead of traditional loan history.
+              </p>
+            </div>
+          </div>
+          <div class="tool-action">
+            <button class="primary-btn" type="button">
+              <span>Generate FairScore</span>
+              <span class="arrow">→</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Finance360 -->
+        <article class="tool-card">
+          <div class="tool-header">
+            <div class="tool-icon">📊</div>
+            <div class="tool-text">
+              <h2>Finance360</h2>
+              <p>
+                Upload financial SMS and statements to get categorized insights,
+                spending trends and personalized budgeting suggestions.
+              </p>
+            </div>
+          </div>
+          <div class="tool-action">
+            <button class="primary-btn" type="button">
+              <span>Upload SMS</span>
+              <span class="arrow">→</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- LoanGuard -->
+        <article class="tool-card">
+          <div class="tool-header">
+            <div class="tool-icon">🛡️</div>
+            <div class="tool-text">
+              <h2>LoanGuard</h2>
+              <p>
+                Analyze loan offers for hidden charges, unfair rates and risky
+                clauses before you sign anything.
+              </p>
+            </div>
+          </div>
+          <div class="tool-action">
+            <button class="primary-btn" type="button">
+              <span>Check Loan Safety</span>
+              <span class="arrow">→</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Fraud Phase Detection -->
+        <article class="tool-card">
+          <div class="tool-header">
+            <div class="tool-icon">🚨</div>
+            <div class="tool-text">
+              <h2>Fraud Phase Detection</h2>
+              <p>
+                Detect suspicious transaction patterns, phishing attempts and
+                scam‑like activity across your accounts in real time.
+              </p>
+            </div>
+          </div>
+          <div class="tool-action">
+            <button class="primary-btn" type="button">
+              <span>Scan for Fraud</span>
+              <span class="arrow">→</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- ClearClause (replaces Salary Slip Detection) -->
+        <article class="tool-card">
+          <div class="tool-header">
+            <div class="tool-icon">📄</div>
+            <div class="tool-text">
+              <h2>ClearClause</h2>
+              <p>
+                Analyzes legal clauses, identifies risks, explains meaning clearly,
+                and suggests improvements for better contract understanding.
+              </p>
+            </div>
+          </div>
+          <div class="tool-action">
+            <button class="primary-btn" type="button">
+              <span>Analyze Salary Slip</span>
+              <span class="arrow">→</span>
+            </button>
+          </div>
+        </article>
+      </section>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 AI FairStake. All rights reserved.
+  </footer>
+
+  <!-- Simple client-side auth guard & logout -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const isLoggedIn = localStorage.getItem("fs_isLoggedIn") === "true";
+      if (!isLoggedIn) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      const logoutBtn = document.getElementById("logout-btn");
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+          localStorage.removeItem("fs_isLoggedIn");
+          window.location.href = "index.html";
+        });
+      }
+    });
+  </script>
+</body>
+</html>

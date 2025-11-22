@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI FairStake — Log In</title>
+
+  <style>
+    :root {
+      --bg-main: #020617;
+      --bg-card: #dbe5f4;
+      --bg-card-soft: #cfd8e8;
+      --border-card: rgba(148, 163, 184, 0.8);
+      --text-main: #e5e7eb;
+      --text-muted: #cbd5f5;
+      --text-card-main: #111827;
+      --text-card-soft: #4b5563;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        sans-serif;
+      background:
+        radial-gradient(circle at 0 0, #1f2937 0, transparent 55%),
+        radial-gradient(circle at 100% 0, #1f2937 0, transparent 55%),
+        var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .site-header {
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.55);
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.9);
+    }
+
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+    }
+
+    .header-links {
+      display: flex;
+      gap: 16px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .header-links a:hover { color: #ffffff; }
+
+    .auth-shell {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px 40px;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 420px;
+      background: linear-gradient(145deg, var(--bg-card), var(--bg-card-soft));
+      border-radius: 26px;
+      border: 1px solid var(--border-card);
+      box-shadow: 0 28px 70px rgba(15, 23, 42, 0.9);
+      padding: 28px 26px 24px;
+      color: var(--text-card-main);
+      animation: fadeUp 640ms ease-out both;
+    }
+
+    .auth-title {
+      margin: 0 0 6px;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .auth-subtitle {
+      margin: 0 0 20px;
+      font-size: 14px;
+      color: var(--text-card-soft);
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      color: var(--text-card-main);
+    }
+
+    input {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      padding: 9px 14px;
+      font-size: 14px;
+      outline: none;
+      color: var(--text-card-main);
+      background: rgba(243, 244, 246, 0.95);
+      transition: border-color 130ms ease, box-shadow 130ms ease,
+        background 130ms ease;
+    }
+
+    input:focus {
+      border-color: #020617;
+      box-shadow: 0 0 0 1px #02061733;
+      background: #ffffff;
+    }
+
+    .auth-actions { margin-top: 18px; }
+
+    .btn-primary {
+      width: 100%;
+      border-radius: 999px;
+      padding: 10px 16px;
+      border: none;
+      background: #020617;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+      transition: transform 140ms ease, box-shadow 140ms ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 24px 52px rgba(15, 23, 42, 1);
+    }
+
+    .auth-footer {
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--text-card-soft);
+      text-align: center;
+    }
+
+    .auth-footer a {
+      color: #020617;
+      font-weight: 600;
+    }
+
+    .auth-footer a:hover { text-decoration: underline; }
+
+    .support-row {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text-card-soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .support-row a {
+      color: #020617;
+      font-weight: 500;
+    }
+
+    .support-row a:hover { text-decoration: underline; }
+
+    footer {
+      padding: 10px 16px 16px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+
+    @media (max-width: 480px) {
+      .auth-card { padding: 24px 18px 20px; }
+    }
+
+    /* Chatbase Chatbot Styles */
+    #chatbase-chatbot-button {
+      width: 65px !important;
+      height: 65px !important;
+      animation: pulseGlow 2s infinite ease-in-out;
+      border-radius: 50% !important;
+      position: fixed !important;
+      bottom: 90px !important;
+      right: 24px !important;
+      z-index: 9999 !important;
+      transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    }
+
+    #chatbase-chatbot-button:hover {
+      transform: scale(1.05) !important;
+    }
+
+    @keyframes pulseGlow {
+      0% { 
+        box-shadow: 0 0 0px rgba(203, 213, 245, 0.4), 0 0 0px rgba(203, 213, 245, 0.2);
+      }
+      50% { 
+        box-shadow: 0 0 20px rgba(203, 213, 245, 0.9), 0 0 30px rgba(203, 213, 245, 0.5);
+      }
+      100% { 
+        box-shadow: 0 0 0px rgba(203, 213, 245, 0.4), 0 0 0px rgba(203, 213, 245, 0.2);
+      }
+    }
+
+    /* Ensure chatbot widget container has smooth transitions */
+    #chatbase-chatbot-widget {
+      transition: opacity 0.3s ease, transform 0.3s ease !important;
+    }
+  </style>
+
+  <!-- Chatbase Chatbot Embed -->
+  <script>
+    window.embeddedChatbotConfig = {
+      chatbotId: "iRl4VsjNhuiaSN1QAz_SO",
+      domain: "www.chatbase.co"
+    }
+  </script>
+  <script src="https://www.chatbase.co/embed.min.js" defer></script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <img
+          src="./83541380-17ab-4c10-8a47-9b42bbae6625-removebg-preview.png"
+          alt="AI FairStake Logo"
+          class="brand-logo"
+        />
+        <div class="brand-name">AI FairStake</div>
+      </div>
+      <div class="header-links">
+        <a href="index.html">Home</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="signup.html">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Log In Card -->
+  <main class="auth-shell">
+    <div class="auth-card">
+      <h1 class="auth-title">Welcome back</h1>
+      <p class="auth-subtitle">
+        Log in to continue using AI FairStake and access your financial
+        fairness, health and loan safety tools.
+      </p>
+
+      <form action="#" method="post">
+        <div style="margin-bottom:14px;">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+
+        <div style="margin-bottom:4px;">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+
+        <div class="support-row">
+          <label style="display:flex;align-items:center;gap:6px;">
+            <input type="checkbox" style="width:14px;height:14px;border-radius:4px;" />
+            <span>Remember me</span>
+          </label>
+          <a href="#">Forgot password?</a>
+        </div>
+
+        <div class="auth-actions">
+          <button class="btn-primary" type="submit">
+            Log In
+          </button>
+        </div>
+      </form>
+
+      <div class="auth-footer">
+        Don’t have an account yet?
+        <a href="signup.html">Create one</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 AI FairStake. All rights reserved.
+  </footer>
+
+  <!-- Simple front-end login: set "logged in" flag then go to dashboard -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.querySelector("form");
+      const emailInput = document.getElementById("email");
+
+      // Prefill email from signup
+      const storedEmail = localStorage.getItem("fs_signup_email");
+      if (storedEmail && emailInput && !emailInput.value) {
+        emailInput.value = storedEmail;
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Here you'd normally validate with a backend.
+        // For now just set a simple "logged in" flag.
+        localStorage.setItem("fs_isLoggedIn", "true");
+
+        // Redirect to dashboard
+        window.location.href = "dashboard.html";
+      });
+    });
+  </script>
+</body>
+</html>
